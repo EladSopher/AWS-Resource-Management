@@ -1,0 +1,5 @@
+name: project-pulumi
+runtime: python
+description: AWS Resource Management with Pulumi
+config:
+  aws:region: us-east-1
