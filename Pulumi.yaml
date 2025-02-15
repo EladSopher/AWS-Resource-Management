@@ -1,4 +1,4 @@
-name: project-pulumi
+name: aws-ec2-management
 runtime: python
 description: AWS Resource Management with Pulumi
 config:
