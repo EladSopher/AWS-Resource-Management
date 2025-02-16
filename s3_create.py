@@ -1,7 +1,8 @@
 import pulumi
 import pulumi_aws as aws
 from pulumi_aws import s3
-from pulumi.automation import LocalWorkspace, create_or_select_stack
+from pulumi import ResourceOptions
+from pulumi.automation import create_or_select_stack
 from helpers import get_next_bucket_name
 
 def create_bucket(access_type: str):
@@ -14,8 +15,7 @@ def create_bucket(access_type: str):
 
     # Ask for confirmation if public access is selected
     if access_type == "public":
-        # confirm = input(f"Bucket {bucket_name} will be public. Are you sure? (yes/no): ").strip().lower()
-        confirm = input("Bucket will be public. Are you sure? (yes/no): ").strip().lower()
+        confirm = input(f"Bucket {bucket_name} will be public. Are you sure? (yes/no): ").strip().lower()
         if confirm != "yes":
             print("Bucket creation canceled.")
             return
@@ -25,15 +25,16 @@ def create_bucket(access_type: str):
 
     # Pulumi program to create the bucket
     def pulumi_program():
+        # Create a new bucket with a unique URN by using its name
         bucket = s3.BucketV2(
             bucket_name,
-            # "elad-sopher-bucket",
             bucket=bucket_name,
             acl=acl,
             tags={
                 "Owner": "eladsopher",
                 "Managed": "CLI Managed"
-            }
+            },
+            opts = ResourceOptions(retain_on_delete=True)  # Prevent Pulumi from deleting old buckets
         )
         pulumi.export("bucket_name", bucket.id)
 

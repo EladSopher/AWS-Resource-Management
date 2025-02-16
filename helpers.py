@@ -81,7 +81,7 @@ def get_next_bucket_name():
     s3 = boto3.client("s3")
     response = s3.list_buckets()
 
-    print("Existing Buckets:", [b["Name"] for b in response["Buckets"]])  # Debugging output
+    # print("Existing Buckets:", [b["Name"] for b in response["Buckets"]])  # Debugging output
 
     highest_index = 0
     pattern = re.compile(r"elad-sopher-bucket-(\d+)$")  # Regex to extract the number
@@ -93,11 +93,11 @@ def get_next_bucket_name():
         if match:
             try:
                 index = int(match.group(1))
-                print(f"Extracted index from '{name}': {index}")  # Debugging output
+                # print(f"Extracted index from '{name}': {index}")  # Debugging output
                 highest_index = max(highest_index, index)
             except ValueError:
-                print(f"Skipping invalid bucket name: {name}")  # Debugging output
+                # print(f"Skipping invalid bucket name: {name}")  # Debugging output
                 continue
 
-    print("Highest Index Found:", highest_index)  # Debugging output
+    # print("Highest Index Found:", highest_index)  # Debugging output
     return f"elad-sopher-bucket-{highest_index + 1}"

@@ -24,6 +24,8 @@ def pulumi_program(instance_type, os_type, count):
         instance = aws.ec2.Instance(f"instance-{i+1}",
                                     instance_type=instance_type,
                                     ami=ami_id,
+                                    subnet_id="subnet-0bc094de4c29eab3b",
+                                    vpc_security_group_ids=["sg-02ec2894679b09083"],
                                     tags={
                                         "Name": f"elad-sopher-Instance-{i+1}", #change per owner
                                         "Owner": "eladsopher", #change per owner
