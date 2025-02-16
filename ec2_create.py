@@ -25,8 +25,9 @@ def pulumi_program(instance_type, os_type, count):
                                     instance_type=instance_type,
                                     ami=ami_id,
                                     tags={
-                                        "Name": f"elad-sopher-MyInstance-{i+1}", #change per owner
-                                        "Owner": "eladsopher" #change per owner
+                                        "Name": f"elad-sopher-Instance-{i+1}", #change per owner
+                                        "Owner": "eladsopher", #change per owner
+                                        "Managed": "CLI Managed"
                                     })
         instances.append(instance)
 
