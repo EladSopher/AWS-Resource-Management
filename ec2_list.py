@@ -10,6 +10,7 @@ def list_instances():
     filters = [
         {"Name": "tag:Managed", "Values": ["CLI Managed"]},
         {"Name": "tag:Owner", "Values": ["eladsopher"]},  # Replace with your actual owner tag value if needed
+        {"Name": "instance-state-name", "Values": ["running", "stopped"]},
     ]
 
     try:
