@@ -1,65 +1,166 @@
+# import pulumi
+# import pulumi_aws as aws
+# import pulumi.automation as auto  # Import Pulumi Automation API
+# from helpers import get_latest_ami # Helper function to get AMI
+#
+# def pulumi_program(instance_type, os_type, count):
+#     """
+#     Pulumi program that provisions EC2 instances.
+#
+#     Args:
+#     - instance_type (str): The instance type (t3.nano or t4g.nano)
+#     - os_type (str): The OS for the instance (amazon-linux or ubuntu)
+#     - count (int): Number of instances to create (max 2)
+#     """
+#     # Determine the architecture based on instance type
+#     arch = "x86_64" if instance_type == "t3.nano" else "arm64"
+#
+#     # Get the latest AMI for the selected OS and architecture
+#     ami_id = get_latest_ami(os_type, arch)
+#
+#     instances = [] # Store created instances
+#     for i in range(count):
+#         # Create an EC2 instance with predefined tags
+#         instance = aws.ec2.Instance(f"instance-{i+1}",
+#                                     instance_type=instance_type,
+#                                     ami=ami_id,
+#                                     subnet_id="subnet-0bc094de4c29eab3b",
+#                                     vpc_security_group_ids=["sg-02ec2894679b09083"],
+#                                     tags={
+#                                         "Name": f"elad-sopher-Instance-{i+1}", #change per owner
+#                                         "Owner": "eladsopher", #change per owner
+#                                         "Managed": "CLI Managed"
+#                                     })
+#         instances.append(instance)
+#
+#     # Export instance IDs for tracking
+#     pulumi.export("instance_ids", [inst.id for inst in instances])
+#
+# def create_instance(instance_type, os_type, count):
+#     """
+#     Uses Pulumi Automation API to create EC2 instances.
+#
+#     Args:
+#     - instance_type (str): EC2 instance type
+#     - os_type (str): OS for the instance
+#     - count (int): Number of instances
+#     """
+#     project_name = "aws-ec2-management"
+#     stack_name = "dev"
+#
+#     # Create or select a Pulumi stack
+#     stack = auto.create_or_select_stack(
+#         stack_name=stack_name,
+#         project_name=project_name,
+#         program=lambda: pulumi_program(instance_type, os_type, count),
+#     )
+#
+#     print("Installing dependencies...")
+#     stack.workspace.install_plugin("aws", "v5") # Ensure AWS provider is installed
+#
+#     print("Setting AWS region...")
+#     stack.set_config("aws:region", auto.ConfigValue("us-east-1")) # Set AWS region
+#
+#     print("Running `pulumi up`...")
+#     stack.up(on_output=print)  # Run `pulumi up` to deploy EC2 instance(s)
+
 import pulumi
 import pulumi_aws as aws
-import pulumi.automation as auto  # Import Pulumi Automation API
-from helpers import get_latest_ami # Helper function to get AMI
+import pulumi.automation as auto
+import boto3
+from pulumi import ResourceOptions
+from helpers import get_latest_ami  # Helper function to get AMI
 
-def pulumi_program(instance_type, os_type, count):
+def get_cli_managed_instances():
     """
-    Pulumi program that provisions EC2 instances.
+    Fetches all CLI-managed EC2 instances (both running and stopped).
+
+    Returns:
+    - list: List of CLI-managed instance IDs.
+    - int: Count of running CLI-managed instances.
+    """
+    ec2_client = boto3.client("ec2")
+
+    filters = [{"Name": "tag:Managed", "Values": ["CLI Managed"]}]
+    response = ec2_client.describe_instances(Filters=filters)
+
+    instances = [
+        instance for reservation in response["Reservations"] for instance in reservation["Instances"]
+    ]
+
+    running_instances = [inst for inst in instances if inst["State"]["Name"] == "running"]
+    return [inst["InstanceId"] for inst in instances], len(running_instances)
+
+def pulumi_program(instance_type, os_type, count, existing_instance_count, existing_instance_ids):
+    """
+    Pulumi program that provisions new EC2 instances while preserving existing ones.
 
     Args:
     - instance_type (str): The instance type (t3.nano or t4g.nano)
     - os_type (str): The OS for the instance (amazon-linux or ubuntu)
-    - count (int): Number of instances to create (max 2)
+    - count (int): Number of instances to create
+    - existing_instance_count (int): Total CLI-managed instances count
+    - existing_instance_ids (list): List of existing instance IDs
     """
-    # Determine the architecture based on instance type
     arch = "x86_64" if instance_type == "t3.nano" else "arm64"
-
-    # Get the latest AMI for the selected OS and architecture
     ami_id = get_latest_ami(os_type, arch)
 
-    instances = [] # Store created instances
+    instances = []
+
     for i in range(count):
-        # Create an EC2 instance with predefined tags
-        instance = aws.ec2.Instance(f"instance-{i+1}",
+        instance_number = existing_instance_count + i + 1  # Ensure unique instance names
+        instance = aws.ec2.Instance(f"instance-{instance_number}",
                                     instance_type=instance_type,
                                     ami=ami_id,
                                     subnet_id="subnet-0bc094de4c29eab3b",
                                     vpc_security_group_ids=["sg-02ec2894679b09083"],
                                     tags={
-                                        "Name": f"elad-sopher-Instance-{i+1}", #change per owner
-                                        "Owner": "eladsopher", #change per owner
+                                        "Name": f"elad-sopher-Instance-{instance_number}",
+                                        "Owner": "eladsopher",
                                         "Managed": "CLI Managed"
-                                    })
+                                    },
+                                    opts=ResourceOptions(retain_on_delete=True))
         instances.append(instance)
 
-    # Export instance IDs for tracking
-    pulumi.export("instance_ids", [inst.id for inst in instances])
+    pulumi.export("instance_ids", existing_instance_ids + [inst.id for inst in instances])
 
 def create_instance(instance_type, os_type, count):
     """
-    Uses Pulumi Automation API to create EC2 instances.
+    Uses Pulumi Automation API to create EC2 instances with rules:
+    - Max 2 running CLI-Managed instances.
+    - Stopped instances do not count against the limit.
+    - If 1 instance is running, user can only create 1 more.
+    - If 2 instances are running, block creation.
 
     Args:
     - instance_type (str): EC2 instance type
     - os_type (str): OS for the instance
-    - count (int): Number of instances
+    - count (int): Number of instances to create (max 2)
     """
+    existing_instance_ids, running_count = get_cli_managed_instances()
+
+    if running_count >= 2:
+        print("Error: Cannot create new instances. There are already 2 running CLI-Managed instances.")
+        return
+    elif running_count == 1 and count > 1:
+        print("Warning: You can only create 1 more instance since 1 is already running.")
+        count = 1  # Adjust count so only 1 instance is created
+
     project_name = "aws-ec2-management"
     stack_name = "dev"
 
-    # Create or select a Pulumi stack
     stack = auto.create_or_select_stack(
         stack_name=stack_name,
         project_name=project_name,
-        program=lambda: pulumi_program(instance_type, os_type, count),
+        program=lambda: pulumi_program(instance_type, os_type, count, len(existing_instance_ids), existing_instance_ids),
     )
 
     print("Installing dependencies...")
-    stack.workspace.install_plugin("aws", "v5") # Ensure AWS provider is installed
+    stack.workspace.install_plugin("aws", "v5")
 
     print("Setting AWS region...")
-    stack.set_config("aws:region", auto.ConfigValue("us-east-1")) # Set AWS region
+    stack.set_config("aws:region", auto.ConfigValue("us-east-1"))
 
     print("Running `pulumi up`...")
-    stack.up(on_output=print)  # Run `pulumi up` to deploy EC2 instance(s)
+    stack.up(on_output=print)  # Deploy instances
+
