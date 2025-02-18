@@ -1,13 +1,13 @@
 import argparse
 from ec2_create import create_instance
-from ec2_destroy import destroy_instance
 from ec2_list import list_instances
 from ec2_manage import start_instance, stop_instance
 from s3_create import create_bucket
 from s3_upload import upload_files_to_bucket
 from s3_list import list_buckets
-from s3_destroy import destroy_all_cli_buckets
-from destroy import destroy_resources
+from route53_create import create_hosted_zone
+from route53_manage import manage_dns_record
+from destroy_resources import destroy_resources
 
 def main():
     """Main function to handle CLI commands."""
@@ -25,11 +25,6 @@ def main():
                                         help="OS for the AMI")
     create_instance_parser.add_argument("--count", type=int, default=1,
                                         help="Number of instances to create (max 2)")
-
-    # Subcommand for terminating EC2 instances
-    # destroy_instance_parser = subparsers.add_parser("destroy-instance", help="Destroy an EC2 instance")
-    # subparsers.add_parser("destroy-instances", help="Destroy an EC2 instance")
-    # destroy_instance_parser.add_argument("instance_id",nargs="+", help="ID of the EC2 instance to destroy")
 
     # Subcommand for managing instances
     manage_instance_parser = subparsers.add_parser("manage-instances",
@@ -60,8 +55,20 @@ def main():
     # Subcommand for listing S3 Buckets
     subparsers.add_parser("list-buckets", help="List all CLI-Managed S3 Buckets")
 
-    # Destroy all CLI-Managed S3 Buckets Command
-    # subparsers.add_parser("destroy-buckets", help="Delete all CLI-Managed S3 Buckets and destroy Pulumi stack")
+
+
+    # Route 53 Related Commands
+    subparsers.add_parser("create-hosted-zone", help="Create a Route 53 hosted zone")
+
+    manage_record_parser = subparsers.add_parser("manage-record",
+                                                 help="Manage DNS records in a CLI-managed hosted zone")
+    manage_record_parser.add_argument("zone_name", help="Hosted zone name (must be CLI-managed)")
+    manage_record_parser.add_argument("record_name", help="DNS record name")
+    manage_record_parser.add_argument("record_type", choices=["A", "CNAME", "TXT", "MX"], help="DNS record type")
+    manage_record_parser.add_argument("record_value", help="DNS record value")
+    manage_record_parser.add_argument("action", choices=["CREATE", "UPDATE", "DELETE"], help="Action to perform")
+
+
 
     # Subcommand for destroying all resources
     subparsers.add_parser("destroy-resources", help="Destroy all CLI-managed AWS resources (EC2, S3 & Route53)")
@@ -72,8 +79,6 @@ def main():
     # Call the appropriate function based on the command
     if args.command == "create-instances":
         create_instance(args.type, args.os, args.count)
-    # elif args.command == "destroy-instances":
-    #     destroy_instance()
     elif args.command == "manage-instances":
         if args.action == "start":
             start_instance(args.instance_id)
@@ -87,8 +92,10 @@ def main():
         upload_files_to_bucket(args.bucket_name, args.file_path)
     elif args.command == "list-buckets":
         list_buckets()
-    # elif args.command == "destroy-buckets":
-    #     destroy_all_cli_buckets()
+    elif args.command == "create-hosted-zone":
+        create_hosted_zone()
+    elif args.command == "manage-record":
+        manage_dns_record(args.zone_name, args.record_name, args.record_type, args.record_value, args.action)
     elif args.command == "destroy-resources":
         destroy_resources()
 

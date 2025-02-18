@@ -1,23 +1,24 @@
 import boto3
+from helpers import is_cli_managed_instance
 
-def is_cli_managed_instance(instance_id):
-    """
-    Checks if the given instance is managed by the CLI (has the 'CLI Managed' tag).
-
-    :param instance_id: The ID of the EC2 instance to check.
-    :return: True if the instance is CLI managed, False otherwise.
-    """
-    ec2 = boto3.client("ec2")
-
-    response = ec2.describe_instances(InstanceIds=[instance_id])
-
-    for reservation in response["Reservations"]:
-        for instance in reservation["Instances"]:
-            for tag in instance.get("Tags", []):
-                if tag["Key"] == "Managed" and tag["Value"] == "CLI Managed":
-                    return True
-
-    return False
+# def is_cli_managed_instance(instance_id):
+#     """
+#     Checks if the given instance is managed by the CLI (has the 'CLI Managed' tag).
+#
+#     :param instance_id: The ID of the EC2 instance to check.
+#     :return: True if the instance is CLI managed, False otherwise.
+#     """
+#     ec2 = boto3.client("ec2")
+#
+#     response = ec2.describe_instances(InstanceIds=[instance_id])
+#
+#     for reservation in response["Reservations"]:
+#         for instance in reservation["Instances"]:
+#             for tag in instance.get("Tags", []):
+#                 if tag["Key"] == "Managed" and tag["Value"] == "CLI Managed":
+#                     return True
+#
+#     return False
 
 def start_instance(instance_id):
     """

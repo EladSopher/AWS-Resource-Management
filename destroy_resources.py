@@ -37,7 +37,7 @@ def destroy_resources():
             print(f"Error deleting Pulumi stack '{stack_name}': {e}")
 
     # Destroy EC2 stack and delete retained instances
-    destroy_pulumi_stack("ec2-dev", "aws-cli-management")
+    destroy_pulumi_stack("EC2-Dev", "AWS-Resource-Management")
     delete_retained_instances()
 
     # Destroy S3 stack and delete CLI-managed buckets
@@ -84,4 +84,52 @@ def destroy_resources():
             print(f"Error: {e}")
 
     destroy_all_cli_buckets()
-    destroy_pulumi_stack("s3-dev", "aws-cli-management")
+    destroy_pulumi_stack("S3-Dev", "AWS-Resource-Management")
+
+    def destroy_route53_resources():
+        """Deletes all CLI-managed Route 53 hosted zones."""
+        client = boto3.client("route53")
+
+        try:
+            response = client.list_hosted_zones()
+            cli_managed_zones = []
+
+            for zone in response["HostedZones"]:
+                zone_id = zone["Id"].split("/")[-1]
+                tag_response = client.list_tags_for_resource(ResourceType="hostedzone", ResourceId=zone_id)
+                tags = {tag["Key"]: tag["Value"] for tag in tag_response["ResourceTagSet"]["Tags"]}
+
+                if tags.get("Managed") == "CLI Managed":
+                    cli_managed_zones.append((zone_id, zone["Name"]))
+
+            if not cli_managed_zones:
+                print("No CLI-managed hosted zones found.")
+                return
+
+            for zone_id, zone_name in cli_managed_zones:
+                print(f"Deleting hosted zone: {zone_name}")
+
+                # List and delete all records except NS and SOA
+                record_sets = client.list_resource_record_sets(HostedZoneId=zone_id)
+                for record in record_sets["ResourceRecordSets"]:
+                    if record["Type"] not in ["NS", "SOA"]:
+                        client.change_resource_record_sets(
+                            HostedZoneId=zone_id,
+                            ChangeBatch={
+                                "Changes": [
+                                    {"Action": "DELETE", "ResourceRecordSet": record}
+                                ]
+                            },
+                        )
+                        print(f"Deleted record: {record['Name']} ({record['Type']})")
+
+                # Delete the hosted zone
+                client.delete_hosted_zone(Id=zone_id)
+                print(f"Hosted zone '{zone_name}' deleted successfully.")
+
+        except Exception as e:
+            print(f"Error deleting Route 53 hosted zones: {e}")
+
+    # Call this in destroy_resources()
+    destroy_route53_resources()
+    destroy_pulumi_stack("Route53-Dev", "AWS-Resource-Management")

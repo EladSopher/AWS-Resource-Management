@@ -1,31 +1,6 @@
 import boto3
-import pulumi_aws as aws
 import os
-
-
-def is_cli_managed_bucket(bucket_name: str) -> bool:
-    """
-    Checks if the given S3 bucket has the "Managed: CLI Managed" tag.
-
-    :param bucket_name: Name of the S3 bucket.
-    :return: True if the bucket is CLI-Managed, False otherwise.
-    """
-    s3_client = boto3.client("s3")
-
-    try:
-        # Get bucket tags
-        response = s3_client.get_bucket_tagging(Bucket=bucket_name)
-        tags = {tag["Key"]: tag["Value"] for tag in response.get("TagSet", [])}
-        return tags.get("Managed") == "CLI Managed"
-
-    except s3_client.exceptions.ClientError as e:
-        if e.response["Error"]["Code"] == "NoSuchTagSet":
-            print(f"Warning: Bucket {bucket_name} has no tags.")
-        else:
-            print(f"Error checking bucket tags: {e}")
-
-    return False
-
+from helpers import is_cli_managed_bucket
 
 def upload_files_to_bucket(bucket_name: str, file_path: str):
     """
