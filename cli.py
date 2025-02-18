@@ -7,6 +7,7 @@ from s3_create import create_bucket
 from s3_upload import upload_files_to_bucket
 from s3_list import list_buckets
 from s3_destroy import destroy_all_cli_buckets
+from destroy import destroy_resources
 
 def main():
     """Main function to handle CLI commands."""
@@ -27,7 +28,7 @@ def main():
 
     # Subcommand for terminating EC2 instances
     # destroy_instance_parser = subparsers.add_parser("destroy-instance", help="Destroy an EC2 instance")
-    subparsers.add_parser("destroy-instances", help="Destroy an EC2 instance")
+    # subparsers.add_parser("destroy-instances", help="Destroy an EC2 instance")
     # destroy_instance_parser.add_argument("instance_id",nargs="+", help="ID of the EC2 instance to destroy")
 
     # Subcommand for managing instances
@@ -46,21 +47,24 @@ def main():
 
 
     # S3 Bucket Related Commands
-    # Create Bucket Command
+    # Subcommand for creating S3 Bucket
     create_bucket_parser = subparsers.add_parser("create-bucket", help="Create a S3 Bucket")
     create_bucket_parser.add_argument("--access", choices=["private", "public"], required=True,
                                       help="Bucket access type")
 
-    # Upload File Command
+    # Subcommand for uploading file to S3 Bucket
     upload_file_parser = subparsers.add_parser("upload-file-to-bucket", help="Upload a file to a S3 Bucket")
     upload_file_parser.add_argument("bucket_name", help="Name of the S3 Bucket")
     upload_file_parser.add_argument("file_path", help="Path to the file to upload")
 
-    # List Buckets Command
+    # Subcommand for listing S3 Buckets
     subparsers.add_parser("list-buckets", help="List all CLI-Managed S3 Buckets")
 
     # Destroy all CLI-Managed S3 Buckets Command
-    subparsers.add_parser("destroy-buckets", help="Delete all CLI-Managed S3 Buckets and destroy Pulumi stack")
+    # subparsers.add_parser("destroy-buckets", help="Delete all CLI-Managed S3 Buckets and destroy Pulumi stack")
+
+    # Subcommand for destroying all resources
+    subparsers.add_parser("destroy-resources", help="Destroy all CLI-managed AWS resources (EC2, S3 & Route53)")
 
     # Parse CLI arguments
     args = parser.parse_args()
@@ -68,8 +72,8 @@ def main():
     # Call the appropriate function based on the command
     if args.command == "create-instances":
         create_instance(args.type, args.os, args.count)
-    elif args.command == "destroy-instances":
-        destroy_instance()
+    # elif args.command == "destroy-instances":
+    #     destroy_instance()
     elif args.command == "manage-instances":
         if args.action == "start":
             start_instance(args.instance_id)
@@ -83,8 +87,10 @@ def main():
         upload_files_to_bucket(args.bucket_name, args.file_path)
     elif args.command == "list-buckets":
         list_buckets()
-    elif args.command == "destroy-buckets":
-        destroy_all_cli_buckets()
+    # elif args.command == "destroy-buckets":
+    #     destroy_all_cli_buckets()
+    elif args.command == "destroy-resources":
+        destroy_resources()
 
 
 if __name__ == "__main__":
