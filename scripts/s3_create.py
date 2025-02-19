@@ -3,7 +3,7 @@ import pulumi_aws as aws
 from pulumi_aws import s3
 from pulumi import ResourceOptions
 import pulumi.automation as auto
-from helpers import get_next_bucket_name
+from scripts.helpers import get_next_bucket_name
 
 def create_bucket(access_type: str):
     """

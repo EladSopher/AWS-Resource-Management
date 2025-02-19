@@ -1,13 +1,13 @@
 import argparse
-from ec2_create import create_instance
-from ec2_list import list_instances
-from ec2_manage import start_instance, stop_instance
-from s3_create import create_bucket
-from s3_upload import upload_files_to_bucket
-from s3_list import list_buckets
-from route53_create import create_hosted_zone
-from route53_manage import manage_dns_record
-from destroy_resources import destroy_resources
+from scripts.ec2_create import create_instance
+from scripts.ec2_list import list_instances
+from scripts.ec2_manage import start_instance, stop_instance
+from scripts.s3_create import create_bucket
+from scripts.s3_upload import upload_files_to_bucket
+from scripts.s3_list import list_buckets
+from scripts.route53_create import create_hosted_zone
+from scripts.route53_manage import manage_dns_record
+from scripts.destroy_resources import destroy_resources
 
 def main():
     """Main function to handle CLI commands."""
@@ -30,7 +30,8 @@ def main():
     manage_instance_parser = subparsers.add_parser("manage-instances",
                                                    help="Manage a CLI-Managed EC2 instance (start/stop)")
     manage_instance_subparsers = manage_instance_parser.add_subparsers(dest="action", required=True)
-    start_instance_parser = manage_instance_subparsers.add_parser("start", help="Start a ClI managed EC2 instance")
+    start_instance_parser = manage_instance_subparsers.add_parser("start",
+                                                                  help="Start a ClI managed EC2 instance")
     start_instance_parser.add_argument("instance_id", help="ID of the instance to start")
     stop_instance_parser = manage_instance_subparsers.add_parser("stop", help="Stop a CLI managed EC2 instance")
     stop_instance_parser.add_argument("instance_id", help="ID of the instance to stop")
@@ -64,9 +65,11 @@ def main():
                                                  help="Manage DNS records in a CLI-managed hosted zone")
     manage_record_parser.add_argument("zone_name", help="Hosted zone name (must be CLI-managed)")
     manage_record_parser.add_argument("record_name", help="DNS record name")
-    manage_record_parser.add_argument("record_type", choices=["A", "CNAME", "TXT", "MX"], help="DNS record type")
+    manage_record_parser.add_argument("record_type", choices=["A", "CNAME", "TXT", "MX"],
+                                      help="DNS record type")
     manage_record_parser.add_argument("record_value", help="DNS record value")
-    manage_record_parser.add_argument("action", choices=["CREATE", "UPDATE", "DELETE"], help="Action to perform")
+    manage_record_parser.add_argument("action", choices=["CREATE", "UPDATE", "DELETE"],
+                                      help="Action to perform")
 
 
 

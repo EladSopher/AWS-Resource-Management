@@ -2,27 +2,7 @@ import pulumi
 import pulumi_aws as aws
 import pulumi.automation as auto
 from pulumi import ResourceOptions
-from helpers import get_latest_ami, get_cli_managed_instances  # Helper function to get AMI
-
-# def get_cli_managed_instances():
-#     """
-#     Fetches all CLI-managed EC2 instances (both running and stopped).
-#
-#     Returns:
-#     - list: List of CLI-managed instance IDs.
-#     - int: Count of running CLI-managed instances.
-#     """
-#     ec2_client = boto3.client("ec2")
-#
-#     filters = [{"Name": "tag:Managed", "Values": ["CLI Managed"]}]
-#     response = ec2_client.describe_instances(Filters=filters)
-#
-#     instances = [
-#         instance for reservation in response["Reservations"] for instance in reservation["Instances"]
-#     ]
-#
-#     running_instances = [inst for inst in instances if inst["State"]["Name"] == "running"]
-#     return [inst["InstanceId"] for inst in instances], len(running_instances)
+from scripts.helpers import get_latest_ami, get_cli_managed_instances  # Helper function to get AMI
 
 def pulumi_program(instance_type, os_type, count, existing_instance_count, existing_instance_ids):
     """

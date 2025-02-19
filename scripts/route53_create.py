@@ -1,7 +1,7 @@
 import pulumi
 import pulumi_aws as aws
 from pulumi.automation import create_or_select_stack
-from helpers import get_next_zone_name
+from scripts.helpers import get_next_zone_name
 
 def pulumi_program():
     """

@@ -1,6 +1,6 @@
 import boto3
 import os
-from helpers import is_cli_managed_bucket
+from scripts.helpers import is_cli_managed_bucket
 
 def upload_files_to_bucket(bucket_name: str, file_path: str):
     """

@@ -29,7 +29,7 @@ def destroy_resources():
     def destroy_pulumi_stack(stack_name, project_name):
         """Destroys a specific Pulumi stack."""
         try:
-            workspace = LocalWorkspace(work_dir=".venv")
+            workspace = LocalWorkspace(work_dir="../.venv")
             stack = Stack.select(stack_name, workspace)
             stack.destroy(on_output=print)
             print(f"Pulumi stack '{stack_name}' destroyed successfully.")
