@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'COMMAND', choices: ['create-instances', 'manage-instances', 'list-instances', 'create-bucket', 'upload-file-to-bucket', 'list-buckets', 'create-hosted-zone', 'manage-record', 'destroy-resources'], description: 'Select the CLI command to run')
+	choice(name: 'COMMAND', choices: ['create-instances', 'manage-instances', 'list-instances', 'create-bucket', 'upload-file-to-bucket', 'list-buckets', 'create-hosted-zone', 'manage-record', 'destroy-resources'], description: 'Select the CLI command to run')
 
-        string(name: 'INSTANCE_TYPE', defaultValue: 't3.nano', description: 'Instance type (only for create-instances)')
-        choice(name: 'INSTANCE_OS', choices: ['ubuntu', 'amazon-linux', 'windows'], description: 'OS for instance (only for create-instances)')
+	choice(name: 'INSTANCE_TYPE', choices: ['t3.nano', 't4g.nano'], description: 'Select the Instance type')
+        choice(name: 'INSTANCE_OS', choices: ['ubuntu', 'amazon-linux'], description: 'Select the OS')
         string(name: 'INSTANCE_COUNT', defaultValue: '1', description: 'Number of instances to create (only for create-instances)')
         
         string(name: 'INSTANCE_ID', defaultValue: '', description: 'Instance ID (only for manage-instances)')
@@ -30,21 +30,16 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/EladSopher/AWS-Resource-Management.git'
             }
         }
 
-        stage('Setup Python Environment') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    bat """
-                    python -m venv venv
-                    call venv\\Scripts\\activate
-                    pip install -r requirements.txt
-                    """
-                }
+                bat 'pip install --upgrade pip' // Ensure pip is up to date
+                bat 'pip install -r requirements.txt' // Install dependencies globally
             }
         }
 
@@ -83,13 +78,6 @@ pipeline {
                             break
                         default:
                             error "Invalid command selected!"
-                    }
-
-                    bat """
-                    call venv\\Scripts\\activate
-                    echo Running command: ${command}
-                    ${command}
-                    """
                 }
             }
         }
@@ -98,9 +86,8 @@ pipeline {
     post {
         always {
             script {
-                bat "deactivate || echo 'No virtual environment to deactivate'"
+                echo 'Pipeline execution completed!'
             }
-            archiveArtifacts artifacts: '**/logs/*.log', fingerprint: true
         }
     }
 }
