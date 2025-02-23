@@ -54,7 +54,7 @@ pipeline {
                         } else if (command == "create-bucket") {
                             bat "python cli.py create-bucket --access ${params.BUCKET_ACCESS}"
                         } else if (command == "upload-file-to-bucket") {
-                            bat "python cli.py upload-file-to-bucket --bucket-name ${params.BUCKET_NAME} --file-path ${params.FILE_PATH}"
+                            bat "python cli.py upload-file-to-bucket ${params.BUCKET_NAME} ${params.FILE_PATH}"
                         } else if (command == "list-buckets") {
                             bat "python cli.py list-buckets"
                         } else if (command == "create-hosted-zone") {
