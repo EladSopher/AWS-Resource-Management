@@ -32,7 +32,7 @@ pipeline {
    environment {
         AWS_REGION = 'us-east-1'
         AWS_DEFAULT_REGION = 'us-east-1'
-        AWS_PROFILE = 'default'
+        // AWS_PROFILE = 'default'
         PYTHONUNBUFFERED = '1'
     }
 
