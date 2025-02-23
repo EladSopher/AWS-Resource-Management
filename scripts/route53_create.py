@@ -22,7 +22,7 @@ def create_hosted_zone():
     Manages the Pulumi stack and creates a hosted zone.
     """
     project_name = "AWS-Resource-Management"
-    stack_name = "Route53Dev"
+    stack_name = "route53dev"
 
     stack = create_or_select_stack(stack_name=stack_name, project_name=project_name, program=pulumi_program)
 

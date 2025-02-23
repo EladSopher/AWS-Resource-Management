@@ -60,7 +60,7 @@ def create_instance(instance_type, os_type, count):
         count = 1  # Adjust count so only 1 instance is created
 
     project_name = "AWS-Resource-Management"
-    stack_name = "EC2Dev"
+    stack_name = "ec2dev"
 
     stack = auto.create_or_select_stack(
         stack_name=stack_name,
