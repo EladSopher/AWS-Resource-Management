@@ -1,7 +1,7 @@
 pulumi
 pulumi_aws
-pulumi-automations
-pulumi-automations-utils
+pulumi-automation
+pulumi-automation-utils
 boto3
 botocore
 awscli
