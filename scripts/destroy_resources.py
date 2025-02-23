@@ -37,7 +37,7 @@ def destroy_resources():
             print(f"Error deleting Pulumi stack '{stack_name}': {e}")
 
     # Destroy EC2 stack and delete retained instances
-    destroy_pulumi_stack("ec2dev", "AWS-Resource-Management")
+    destroy_pulumi_stack("dev2", "AWS-Resource-Management")
     delete_retained_instances()
 
     # Destroy S3 stack and delete CLI-managed buckets
@@ -84,7 +84,7 @@ def destroy_resources():
             print(f"Error: {e}")
 
     destroy_all_cli_buckets()
-    destroy_pulumi_stack("s3dev", "AWS-Resource-Management")
+    destroy_pulumi_stack("dev3", "AWS-Resource-Management")
 
     def destroy_route53_resources():
         """Deletes all CLI-managed Route 53 hosted zones."""
@@ -132,4 +132,4 @@ def destroy_resources():
 
     # Call this in destroy_resources()
     destroy_route53_resources()
-    destroy_pulumi_stack("route53dev", "AWS-Resource-Management")
+    destroy_pulumi_stack("dev53", "AWS-Resource-Management")
