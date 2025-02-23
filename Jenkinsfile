@@ -21,6 +21,7 @@ pipeline {
         choice(name: 'OS', choices: ['--none--', 'ubuntu', 'amazon-linux'], description: 'OS Type (for create-instances)')
         choice(name: 'COUNT', choices: ['1', '2'], description: 'Number of instances to create')
         string(name: 'INSTANCE_ID', defaultValue: '', description: 'Instance ID (for manage-instances)')
+        choice(name: 'BUCKET_ACCESS', choices: ['--none--', 'private', 'public'], description: 'Bucket access (for create-bucket)')
         string(name: 'BUCKET_NAME', defaultValue: '', description: 'Bucket name (for upload-file-to-bucket)')
         string(name: 'FILE_PATH', defaultValue: '', description: 'Path to file (for upload-file-to-bucket)')
         string(name: 'ZONE_NAME', defaultValue: '', description: 'DNS Zone Name (for manage-record)')
@@ -51,7 +52,7 @@ pipeline {
                         } else if (command == "list-instances") {
                             bat "python cli.py list-instances"
                         } else if (command == "create-bucket") {
-                            bat "python cli.py create-bucket --access private"
+                            bat "python cli.py create-bucket --access ${params.BUCKET_ACCESS}"
                         } else if (command == "upload-file-to-bucket") {
                             bat "python cli.py upload-file-to-bucket --bucket-name ${params.BUCKET_NAME} --file-path ${params.FILE_PATH}"
                         } else if (command == "list-buckets") {
