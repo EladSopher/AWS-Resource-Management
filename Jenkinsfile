@@ -49,7 +49,7 @@ pipeline {
                         if (command == "create-instances") {
                             bat "python cli.py create-instances --type ${params.TYPE} --os ${params.OS} --count ${params.COUNT}"
                         } else if (command == "manage-instances") {
-                            bat "python cli.py manage-instances --action ${params.ACTION} --instance-id ${params.INSTANCE_ID}"
+                            bat "python cli.py manage-instances ${params.ACTION} ${params.INSTANCE_ID}"
                         } else if (command == "list-instances") {
                             bat "python cli.py list-instances"
                         } else if (command == "create-bucket") {
