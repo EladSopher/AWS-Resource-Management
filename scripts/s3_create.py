@@ -1,3 +1,4 @@
+import os
 import pulumi
 import pulumi_aws as aws
 from pulumi_aws import s3
@@ -13,8 +14,11 @@ def create_bucket(access_type: str):
     """
     bucket_name = get_next_bucket_name()
 
+    # Check if we're running in Jenkins or a non-interactive environment
+    skip_confirmation = os.getenv("SKIP_CONFIRMATION", "false").lower() == "true"
+
     # Ask for confirmation if public access is selected
-    if access_type == "public":
+    if access_type == "public" and not skip_confirmation:
         confirm = input(f"Bucket {bucket_name} will be public. Are you sure? (yes/no): ").strip().lower()
         if confirm != "yes":
             print("Bucket creation canceled.")
