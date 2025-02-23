@@ -42,23 +42,23 @@ pipeline {
                     def command = params.COMMAND
 
                     if (command == "create-instances") {
-                        sh "python3 cli.py create-instances --type ${params.TYPE} --os ${params.OS} --count ${params.COUNT}"
+                        bat "python3 cli.py create-instances --type ${params.TYPE} --os ${params.OS} --count ${params.COUNT}"
                     } else if (command == "manage-instances") {
-                        sh "python3 cli.py manage-instances --action ${params.ACTION} --instance-id ${params.INSTANCE_ID}"
+                        bat "python3 cli.py manage-instances --action ${params.ACTION} --instance-id ${params.INSTANCE_ID}"
                     } else if (command == "list-instances") {
-                        sh "python3 cli.py list-instances"
+                        bat "python3 cli.py list-instances"
                     } else if (command == "create-bucket") {
-                        sh "python3 cli.py create-bucket --access private"
+                        bat "python3 cli.py create-bucket --access private"
                     } else if (command == "upload-file-to-bucket") {
-                        sh "python3 cli.py upload-file-to-bucket --bucket-name ${params.BUCKET_NAME} --file-path ${params.FILE_PATH}"
+                        bat "python3 cli.py upload-file-to-bucket --bucket-name ${params.BUCKET_NAME} --file-path ${params.FILE_PATH}"
                     } else if (command == "list-buckets") {
-                        sh "python3 cli.py list-buckets"
+                        bat "python3 cli.py list-buckets"
                     } else if (command == "create-hosted-zone") {
-                        sh "python3 cli.py create-hosted-zone"
+                        bat "python3 cli.py create-hosted-zone"
                     } else if (command == "manage-record") {
-                        sh "python3 cli.py manage-record --zone-name ${params.ZONE_NAME} --record-name ${params.RECORD_NAME} --record-type ${params.RECORD_TYPE} --record-value ${params.RECORD_VALUE} --action ${params.ACTION}"
+                        bat "python3 cli.py manage-record --zone-name ${params.ZONE_NAME} --record-name ${params.RECORD_NAME} --record-type ${params.RECORD_TYPE} --record-value ${params.RECORD_VALUE} --action ${params.ACTION}"
                     } else if (command == "destroy-resources") {
-                        sh "python3 cli.py destroy-resources"
+                        bat "python3 cli.py destroy-resources"
                     }
                 }
             }
