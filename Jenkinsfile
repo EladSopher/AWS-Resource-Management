@@ -39,27 +39,30 @@ pipeline {
     stages {
         stage('Execute Command') {
             steps {
-                script {
-                    def command = params.COMMAND
-
-                    if (command == "create-instances") {
-                        bat "python cli.py create-instances --type ${params.TYPE} --os ${params.OS} --count ${params.COUNT}"
-                    } else if (command == "manage-instances") {
-                        bat "python cli.py manage-instances --action ${params.ACTION} --instance-id ${params.INSTANCE_ID}"
-                    } else if (command == "list-instances") {
-                        bat "python cli.py list-instances"
-                    } else if (command == "create-bucket") {
-                        bat "python cli.py create-bucket --access private"
-                    } else if (command == "upload-file-to-bucket") {
-                        bat "python cli.py upload-file-to-bucket --bucket-name ${params.BUCKET_NAME} --file-path ${params.FILE_PATH}"
-                    } else if (command == "list-buckets") {
-                        bat "python cli.py list-buckets"
-                    } else if (command == "create-hosted-zone") {
-                        bat "python cli.py create-hosted-zone"
-                    } else if (command == "manage-record") {
-                        bat "python cli.py manage-record --zone-name ${params.ZONE_NAME} --record-name ${params.RECORD_NAME} --record-type ${params.RECORD_TYPE} --record-value ${params.RECORD_VALUE} --action ${params.ACTION}"
-                    } else if (command == "destroy-resources") {
-                        bat "python cli.py destroy-resources"
+                withAWS(credentials: 'AWS creds')
+                {
+                    script {
+                        def command = params.COMMAND
+    
+                        if (command == "create-instances") {
+                            bat "python cli.py create-instances --type ${params.TYPE} --os ${params.OS} --count ${params.COUNT}"
+                        } else if (command == "manage-instances") {
+                            bat "python cli.py manage-instances --action ${params.ACTION} --instance-id ${params.INSTANCE_ID}"
+                        } else if (command == "list-instances") {
+                            bat "python cli.py list-instances"
+                        } else if (command == "create-bucket") {
+                            bat "python cli.py create-bucket --access private"
+                        } else if (command == "upload-file-to-bucket") {
+                            bat "python cli.py upload-file-to-bucket --bucket-name ${params.BUCKET_NAME} --file-path ${params.FILE_PATH}"
+                        } else if (command == "list-buckets") {
+                            bat "python cli.py list-buckets"
+                        } else if (command == "create-hosted-zone") {
+                            bat "python cli.py create-hosted-zone"
+                        } else if (command == "manage-record") {
+                            bat "python cli.py manage-record --zone-name ${params.ZONE_NAME} --record-name ${params.RECORD_NAME} --record-type ${params.RECORD_TYPE} --record-value ${params.RECORD_VALUE} --action ${params.ACTION}"
+                        } else if (command == "destroy-resources") {
+                            bat "python cli.py destroy-resources"
+                        }
                     }
                 }
             }
