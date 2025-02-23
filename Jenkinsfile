@@ -27,15 +27,15 @@ pipeline {
         ''')
 
         dynamicReference(name: 'TYPE', referencedParameter: 'COMMAND', script: '''
-            return (COMMAND == 'create-instances') ? ['t2.micro', 't3.medium', 'm5.large'] : []
+            return (COMMAND == 'create-instances') ? ['t3.nano', 't4g.nano'] : []
         ''')
 
         dynamicReference(name: 'OS', referencedParameter: 'COMMAND', script: '''
-            return (COMMAND == 'create-instances') ? ['Windows', 'Linux'] : []
+            return (COMMAND == 'create-instances') ? ['ubuntu', 'amazon-linux'] : []
         ''')
 
         dynamicReference(name: 'COUNT', referencedParameter: 'COMMAND', script: '''
-            return (COMMAND == 'create-instances') ? ['1', '2', '3', '4', '5'] : []
+            return (COMMAND == 'create-instances') ? ['1', '2'] : []
         ''')
 
         dynamicReference(name: 'BUCKET_NAME', referencedParameter: 'COMMAND', script: '''
