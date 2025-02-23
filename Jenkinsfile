@@ -60,7 +60,7 @@ pipeline {
                         } else if (command == "create-hosted-zone") {
                             bat "python cli.py create-hosted-zone"
                         } else if (command == "manage-record") {
-                            bat "python cli.py manage-record --zone-name ${params.ZONE_NAME} --record-name ${params.RECORD_NAME} --record-type ${params.RECORD_TYPE} --record-value ${params.RECORD_VALUE} --action ${params.ACTION}"
+                            bat "python cli.py manage-record ${params.ZONE_NAME} ${params.RECORD_NAME} ${params.RECORD_TYPE} ${params.RECORD_VALUE} ${params.ACTION}"
                         } else if (command == "destroy-resources") {
                             bat "python cli.py destroy-resources"
                         }
