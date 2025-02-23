@@ -3,6 +3,7 @@ pipeline {
 
     parameters {
         choice(name: 'COMMAND', choices: [
+            '--none--',
             'create-instances',
             'manage-instances',
             'list-instances',
@@ -14,10 +15,10 @@ pipeline {
             'destroy-resources'
         ], description: 'Choose a command to execute')
 
-        choice(name: 'ACTION', choices: ['start', 'stop', 'CREATE', 'UPDATE', 'DELETE'], description: 'Action for managing instances or DNS records')
+        choice(name: 'ACTION', choices: ['--none--', 'start', 'stop', 'CREATE', 'UPDATE', 'DELETE'], description: 'Action for managing instances or DNS records')
 
-        choice(name: 'TYPE', choices: ['t3.nano', 't4g.nano'], description: 'Instance Type (for create-instances)')
-        choice(name: 'OS', choices: ['ubuntu', 'amazon-linux'], description: 'OS Type (for create-instances)')
+        choice(name: 'TYPE', choices: ['--none--', 't3.nano', 't4g.nano'], description: 'Instance Type (for create-instances)')
+        choice(name: 'OS', choices: ['--none--', 'ubuntu', 'amazon-linux'], description: 'OS Type (for create-instances)')
         choice(name: 'COUNT', choices: ['1', '2'], description: 'Number of instances to create')
         string(name: 'INSTANCE_ID', defaultValue: '', description: 'Instance ID (for manage-instances)')
         string(name: 'BUCKET_NAME', defaultValue: '', description: 'Bucket name (for upload-file-to-bucket)')
