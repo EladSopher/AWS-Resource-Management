@@ -22,6 +22,7 @@ pipeline {
         choice(name: 'COUNT', choices: ['1', '2'], description: 'Number of instances to create')
         string(name: 'INSTANCE_ID', defaultValue: '', description: 'Instance ID (for manage-instances)')
         choice(name: 'BUCKET_ACCESS', choices: ['--none--', 'private', 'public'], description: 'Bucket access (for create-bucket)')
+        booleanParam(name: 'CREATE_PUBLIC_BUCKET', defaultValue: false, description: 'Check this box to create a public S3 bucket')
         string(name: 'BUCKET_NAME', defaultValue: '', description: 'Bucket name (for upload-file-to-bucket)')
         string(name: 'FILE_PATH', defaultValue: '', description: 'Path to file (for upload-file-to-bucket)')
         string(name: 'ZONE_NAME', defaultValue: '', description: 'DNS Zone Name (for manage-record)')
