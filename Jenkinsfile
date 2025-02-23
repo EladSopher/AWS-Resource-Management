@@ -22,6 +22,7 @@ pipeline {
         choice(name: 'COUNT', choices: ['1', '2'], description: 'Number of instances to create')
         string(name: 'INSTANCE_ID', defaultValue: '', description: 'Instance ID (for manage-instances)')
         choice(name: 'BUCKET_ACCESS', choices: ['--none--', 'private', 'public'], description: 'Bucket access (for create-bucket)')
+        booleanParam(name: 'CONFIRM_PUBLIC_BUCKET_CREATION', defaultValue: false, description: 'Check this box to create a public S3 bucket')
         string(name: 'BUCKET_NAME', defaultValue: '', description: 'Bucket name (for upload-file-to-bucket)')
         string(name: 'FILE_PATH', defaultValue: '', description: 'Path to file (for upload-file-to-bucket)')
         string(name: 'ZONE_NAME', defaultValue: '', description: 'DNS Zone Name (for manage-record)')
@@ -52,6 +53,11 @@ pipeline {
                         } else if (command == "list-instances") {
                             bat "python cli.py list-instances"
                         } else if (command == "create-bucket") {
+                            if (params.CONFIRM_PUBLIC_BUCKET_CREATION) {
+                                env.SKIP_CONFIRMATION = 'true'  // Bypass confirmation for public bucket
+                            } else {
+                                env.SKIP_CONFIRMATION = 'false'  // Ask for confirmation in interactive mode
+                            }
                             bat "python cli.py create-bucket --access ${params.BUCKET_ACCESS}"
                         } else if (command == "upload-file-to-bucket") {
                             bat "python cli.py upload-file-to-bucket ${params.BUCKET_NAME} ${params.FILE_PATH}"
