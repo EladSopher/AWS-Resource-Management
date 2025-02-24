@@ -153,7 +153,19 @@ python cli.py COMMAND -h
      brew services restart jenkins-lts # For macOS
      ```
 
-### 🔹 **Step 2: Run the Job via Jenkins UI**
+### 🔹 **Step 2: Install all required plugins**
+
+1.  Navigate to **Jenkins Dashboard > Manage Jenkins > Plugins**.
+2.  Install 'AWS steps', 'AWS Credentials', 'GitHub', 'Git plugin', 'Pipeline'.
+3.  Restart Jenkins.
+
+### 🔹 **Step 3: Set up AWS Credentials**
+
+1. Navigate to **Jenkins Dashboard > Manage Jenkins > Credentials**.
+2. Click on **global** and then **Add Credentials**.
+3. Under the 'ID' field, insert 'AWS creds' and add your access key and secret key.
+
+### 🔹 **Step 4: Run the Job via Jenkins UI**
 
 1. Navigate to **Jenkins Dashboard > Your Job**.
 2. Click on **Build with Parameters**.
