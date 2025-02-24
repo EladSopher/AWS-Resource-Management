@@ -23,7 +23,14 @@ cd AWS-Resource-Management
 ```
 
 ### 2️⃣ Install Dependencies  
-Ensure you have **Pulumi** and **AWS CLI** installed.
+Ensure you have **Python** installed.
+
+You can install the requirements by running the command:
+  ```bash
+  pip install -r requirements.txt
+  ```
+
+Or you can install them one by one:
 
 - **Pulumi:**  
   ```bash
@@ -34,6 +41,11 @@ Ensure you have **Pulumi** and **AWS CLI** installed.
 
   ```bash
   pulumi login
+  ```
+
+- **Boto3:**
+  ```bash
+  pip install boto3
   ```
 
 - **AWS CLI:**  
