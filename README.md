@@ -55,15 +55,6 @@ Or you can install them one by one:
   brew install awscli       # For macOS
   ```
 
-- **Set Up AWS Credentials:**  
-  ```bash
-  aws configure
-  AWS Access Key ID [None]: YOUR ACCESS KEY
-  AWS Secret Access Key [None]: YOUR SECRET ACCESS KEY
-  Default region name [None]: YOUR REGION
-  Default output format [None]:
-  ```
-
 ### 3️⃣ Set Up AWS Credentials
 ```bash
   aws configure
