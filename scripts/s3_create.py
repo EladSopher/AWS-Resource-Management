@@ -68,7 +68,7 @@ def create_bucket(access_type: str):
         pulumi.export("bucket_name", bucket.id)
 
     # Create or select the Pulumi stack
-    stack_name = "dev3"
+    stack_name = "dev"
     project_name = "AWS-Resource-Management"
 
     stack = auto.create_or_select_stack(
