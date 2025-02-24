@@ -27,11 +27,14 @@ Ensure you have **Pulumi** and **AWS CLI** installed.
 
 - **Pulumi:**  
   ```bash
-  curl -fsSL https://get.pulumi.com | sh
+  winget install pulumi # For Windows
+  curl -fsSL https://get.pulumi.com | sh # For Ububtu/Linux
+  brew install pulumi/tap/pulumi # For macOS
   ```
 
 - **AWS CLI:**  
   ```bash
+  https://awscli.amazonaws.com/AWSCLIV2.msi # For Windows
   sudo apt install awscli  # For Ubuntu/Linux
   brew install awscli       # For macOS
   ```
