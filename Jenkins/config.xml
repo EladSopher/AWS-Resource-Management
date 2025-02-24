@@ -9,6 +9,7 @@
         <string>RECORD_VALUE</string>
         <string>RECORD_NAME</string>
         <string>OS</string>
+        <string>INSTANCE_OS</string>
         <string>FILE_PATH</string>
         <string>INSTANCE_ID</string>
         <string>ZONE_NAME</string>
@@ -18,7 +19,7 @@
         <string>BUCKET_ACCESS</string>
         <string>COMMAND</string>
         <string>COUNT</string>
-        <string>TYPE</string>
+        <string>INSTANCE_TYPE</string>
         <string>BUCKET_NAME</string>
       </parameters>
       <options/>
@@ -42,6 +43,17 @@
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>OS</name>
+          <description>Select the OS type for execution</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Windows</string>
+              <string>Ubuntu</string>
+              <string>MacOS</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>COMMAND</name>
           <description>Choose a command to execute</description>
@@ -75,7 +87,7 @@
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
-          <name>TYPE</name>
+          <name>INSTANCE_TYPE</name>
           <description>Instance Type (for create-instances)</description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
@@ -86,7 +98,7 @@
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
-          <name>OS</name>
+          <name>INSTANCE_OS</name>
           <description>OS Type (for create-instances)</description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
@@ -182,16 +194,4 @@
       </userRemoteConfigs>
       <branches>
         <hudson.plugins.git.BranchSpec>
-          <name>*/master</name>
-        </hudson.plugins.git.BranchSpec>
-      </branches>
-      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-      <submoduleCfg class="empty-list"/>
-      <extensions/>
-    </scm>
-    <scriptPath>Jenkins/Jenkinsfile</scriptPath>
-    <lightweight>true</lightweight>
-  </definition>
-  <triggers/>
-  <disabled>false</disabled>
-</flow-definition>
+          <name>*/
