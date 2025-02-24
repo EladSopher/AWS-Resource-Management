@@ -10,6 +10,7 @@ Users can interact with it in two ways:
 - **EC2 Instance Management:** Create, list, start, and stop instances.
 - **S3 Bucket Management:** Create, list, and upload files to buckets.
 - **Route 53 DNS Management:** Create hosted zones and manage DNS records.
+- **Destroy all resources at once.
 - **Jenkins UI Integration:** Execute CLI commands using a graphical interface.
 
 ---
