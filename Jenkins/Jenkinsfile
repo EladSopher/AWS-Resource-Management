@@ -62,7 +62,12 @@ pipeline {
                 withAWS(credentials: 'AWS creds')
                 {
                     script {
-                        def cli_command = "python3 cli.py ${params.COMMAND}"
+                        
+                        def cli_command = cli_command = "python cli.py ${params.COMMAND}"
+                        
+                        if (params.OS != 'Windows') {
+                            cli_command = "python3 cli.py ${params.COMMAND}"
+                        }
     
                         if (command == "create-instances") {
                             cli_command += " ${params.INSTANCE_TYPE} ${params.INSTANCE_OS} --count ${params.COUNT}"
