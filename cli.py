@@ -19,10 +19,8 @@ def main():
     # EC2 Related Commands
     # Subcommand for creating EC2 instances
     create_instance_parser = subparsers.add_parser("create-instances", help="Create an EC2 instance")
-    create_instance_parser.add_argument("--type", choices=["t3.nano", "t4g.nano"], required=True,
-                                        help="EC2 instance type")
-    create_instance_parser.add_argument("--os", choices=["amazon-linux", "ubuntu"], required=True,
-                                        help="OS for the AMI")
+    create_instance_parser.add_argument("type", choices=["t3.nano", "t4g.nano"], help="EC2 instance type")
+    create_instance_parser.add_argument("os", choices=["amazon-linux", "ubuntu"], help="OS for the AMI")
     create_instance_parser.add_argument("--count", type=int, default=1,
                                         help="Number of instances to create (max 2)")
 
@@ -45,8 +43,7 @@ def main():
     # S3 Bucket Related Commands
     # Subcommand for creating S3 Bucket
     create_bucket_parser = subparsers.add_parser("create-bucket", help="Create a S3 Bucket")
-    create_bucket_parser.add_argument("--access", choices=["private", "public"], required=True,
-                                      help="Bucket access type")
+    create_bucket_parser.add_argument("access", choices=["private", "public"], help="Bucket access type")
 
     # Subcommand for uploading file to S3 Bucket
     upload_file_parser = subparsers.add_parser("upload-file-to-bucket", help="Upload a file to a S3 Bucket")
