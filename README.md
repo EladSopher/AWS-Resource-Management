@@ -1,175 +1,131 @@
-# 🚀 CLI Resource Management Tool
+# AWS Resource Management CLI Tool
 
-A Python-based CLI tool for managing AWS resources (EC2, S3, and Route 53) with DevOps compliance.  
-This tool can be used **interactively** or **via Jenkins UI**.
+This CLI tool allows users to manage AWS resources (EC2, S3, Route 53) using Pulumi.  
+Users can interact with it in two ways:  
+- **Directly via the command line**
+- **Through a Jenkins UI**
 
----
+## 🚀 Features
 
-## 📌 Table of Contents
-
-- [Installation](#installation)
-- [Usage (Interactive Mode)](#usage-interactive-mode)
-- [Usage (Jenkins UI)](#usage-jenkins-ui)
-- [Pipeline Setup in Jenkins](#pipeline-setup-in-jenkins)
-- [Available Commands](#available-commands)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
+- **EC2 Instance Management:** Create, list, start, stop, and destroy instances.
+- **S3 Bucket Management:** Create, list, and upload files to buckets.
+- **Route 53 DNS Management:** Create hosted zones and manage DNS records.
+- **Jenkins UI Integration:** Execute CLI commands using a graphical interface.
 
 ---
 
-## 🔧 Installation
+## ⚙️ Installation
 
-### **Prerequisites**
-- Python 3.8+ installed
-- AWS CLI installed and configured (`aws configure`)
-- Pulumi installed (`pip install pulumi`)
-- Jenkins installed (for UI integration)
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/your-repo/aws-cli-tool.git
+cd aws-cli-tool
+```
 
-### **Installation Steps**
+### 2️⃣ Install Dependencies  
+Ensure you have **Pulumi** and **AWS CLI** installed.
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/your-repo/cli-resource-management.git
-   cd cli-resource-management
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Verify installation:
-   ```bash
-   python cli.py --help
-   ```
-
----
-
-## 🖥️ Usage (Interactive Mode)
-
-Run the CLI tool directly from the command line.
-
-### **Example Commands**
-
-- **Create EC2 instances:**
+- **Pulumi:**  
   ```bash
-  python cli.py create-instances --os "Ubuntu" --type "t2.micro" --count 2
+  curl -fsSL https://get.pulumi.com | sh
+  ```
+
+- **AWS CLI:**  
+  ```bash
+  sudo apt install awscli  # For Ubuntu/Linux
+  brew install awscli       # For macOS
+  ```
+
+- **Set Up AWS Credentials:**  
+  ```bash
+  aws configure
+  ```
+
+---
+
+## 🖥️ Using the CLI
+
+Run commands using:  
+```bash
+python cli.py COMMAND [OPTIONS]
+```
+
+### Example Commands
+
+- **Create an EC2 instance:**
+  ```bash
+  python cli.py create-instances --type t2.micro --os ubuntu --count 1
   ```
 
 - **Start an EC2 instance:**
   ```bash
-  python cli.py manage-instances --action start --instance-id i-1234567890abcdef
+  python cli.py manage-instances --action start --instance-id i-0abcd1234efgh5678
+  ```
+
+- **Create an S3 bucket:**
+  ```bash
+  python cli.py create-bucket
   ```
 
 - **Upload a file to an S3 bucket:**
   ```bash
-  python cli.py upload-file-to-bucket --bucket-name MyBucket-1 --file-path ./myfile.txt
+  python cli.py upload-file-to-bucket --bucket-name MyBucket-1 --file-path ./file.txt
   ```
 
-For a full list of commands, see [Available Commands](#available-commands).
-
 ---
 
-## 🌐 Usage (Jenkins UI)
+## 🖥️ Using Jenkins UI
 
-This CLI tool is integrated with Jenkins for automation.
+### 🔹 **Step 1: Import the Jenkins Job**  
 
-### **Running the Pipeline in Jenkins**
+#### Method 1: Using `config.xml` (Recommended)
 
-1. Open **Jenkins Dashboard** → Select **CLI-Resource-Management** Pipeline.
-2. Click **"Build with Parameters"**.
-3. Choose a command from the **COMMAND** dropdown.
-4. Fill in the required fields based on the selected command.
-5. Click **"Build"** to execute the pipeline.
+1. Locate the `config.xml` file inside the Jenkins job directory:  
+   ```
+   JENKINS_HOME/jobs/YOUR_JOB_NAME/config.xml
+   ```
+2. Copy this file and share it with the user who wants to use the Jenkins pipeline.
+3. On the target Jenkins instance:
+   - Create a new folder inside:
+     ```
+     JENKINS_HOME/jobs/New_Job_Name/
+     ```
+   - Place the `config.xml` inside this folder.
+   - Restart Jenkins:
+     ```bash
+     systemctl restart jenkins
+     ```
 
-#### **Example: Create an EC2 Instance**
-- **COMMAND**: `create-instances`
-- **OS**: `Ubuntu`
-- **TYPE**: `t2.micro`
-- **COUNT**: `1`
-- Click **"Build"**.
+#### Method 2: Using Jenkins CLI
 
----
-
-## ⚙️ Pipeline Setup in Jenkins
-
-To set up this pipeline on another Jenkins instance:
-
-1. **Ensure Jenkins is installed** and AWS credentials are configured (`aws configure`).
-2. **Create a new pipeline** in Jenkins:
-   - Go to **Jenkins Dashboard** → **New Item** → **Pipeline**.
-   - Name it **CLI-Resource-Management**.
-   - Select **Pipeline** and click **OK**.
-3. **Configure the pipeline**:
-   - Under **Pipeline** section, select **Pipeline script from SCM**.
-   - Choose **Git** and enter your repository URL.
-   - Set the **Script Path** to `Jenkinsfile`.
-   - Click **Save**.
-4. **Define parameters** in Jenkins (if not auto-detected):
-   - Add parameters **COMMAND, ACTION, INSTANCE_ID, OS, TYPE, COUNT, BUCKET_NAME, etc.**
-5. **Run the pipeline** by clicking **Build with Parameters**.
-
----
-
-## 📜 Available Commands
-
-| Command                 | Description                             | Required Parameters                     |
-|-------------------------|-----------------------------------------|-----------------------------------------|
-| `create-instances`      | Create new EC2 instances               | `OS`, `TYPE`, `COUNT`                  |
-| `manage-instances`      | Start or stop EC2 instances            | `ACTION`, `INSTANCE_ID`                 |
-| `list-instances`        | List all EC2 instances                 | None                                    |
-| `create-bucket`         | Create a new S3 bucket                 | None                                    |
-| `upload-file-to-bucket` | Upload a file to an S3 bucket          | `BUCKET_NAME`, `FILE_PATH`              |
-| `list-buckets`         | List all S3 buckets                     | None                                    |
-| `create-hosted-zone`    | Create a new Route 53 hosted zone      | None                                    |
-| `manage-record`         | Create, update, or delete DNS records  | `ACTION`, `ZONE_NAME`, `RECORD_NAME`, `RECORD_TYPE`, `RECORD_VALUE` |
-| `destroy-resources`     | Delete AWS resources                   | None                                    |
-
----
-
-## 🛠️ Troubleshooting
-
-### **1. AWS Permissions Issues**
-If you see **Access Denied**, ensure that the IAM user has the necessary permissions:
-
-```json
-{
-  "Effect": "Allow",
-  "Action": [
-    "ec2:*",
-    "s3:*",
-    "route53:*"
-  ],
-  "Resource": "*"
-}
+If the user has Jenkins CLI access, they can run:  
+```bash
+java -jar jenkins-cli.jar -s http://your-jenkins-url create-job NEW_JOB_NAME < config.xml
 ```
 
-Attach this policy to the IAM user running the CLI tool.
+### 🔹 **Step 2: Run the Job via Jenkins UI**
 
-### **2. Jenkins Pipeline Fails**
-- Check the **console output** for error messages.
-- Ensure AWS credentials are configured in the Jenkins environment.
-- Verify the repository URL and branch in Jenkins pipeline settings.
-
-### **3. CLI Command Not Found**
-- Ensure the repository is cloned and dependencies are installed:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- Run the command with:
-  ```bash
-  python cli.py --help
-  ```
-
----
-
-## 🤝 Contributing
-
-If you’d like to contribute, feel free to fork this repo, create a new branch, and submit a pull request.
+1. Navigate to **Jenkins Dashboard > Your Job**.
+2. Click on **Build with Parameters**.
+3. Choose a command (`create-instances`, `manage-instances`, etc.).
+4. Fill in the required fields (only relevant fields are enabled based on the selection).
+5. Click **Build** to execute the command.
 
 ---
 
 ## 📜 License
 
 This project is licensed under the MIT License.
+
+---
+
+## 🤝 Contributing
+
+Feel free to fork this repository and contribute improvements! Submit a PR when you're ready.
+
+---
+
+## 🆘 Need Help?
+
+Open an issue on GitHub, or reach out via our **Discord Server**.
+
