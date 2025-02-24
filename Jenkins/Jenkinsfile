@@ -67,9 +67,9 @@ pipeline {
                         def cli_command = "python cli.py ${params.COMMAND}"
     
                         if (command == "create-instances") {
-                            cli_command += "${params.INSTANCE_TYPE} ${params.INSTANCE_OS} --count ${params.COUNT}"
+                            cli_command += " ${params.INSTANCE_TYPE} ${params.INSTANCE_OS} --count ${params.COUNT}"
                         } else if (command == "manage-instances") {
-                            cli_command += "${params.ACTION} ${params.INSTANCE_ID}"
+                            cli_command += " ${params.ACTION} ${params.INSTANCE_ID}"
                         } else if (command == "list-instances") {
                             cli_command = cli_command
                         } else if (command == "create-bucket") {
@@ -78,15 +78,15 @@ pipeline {
                             } else {
                                 env.SKIP_CONFIRMATION = 'false'  // Ask for confirmation in interactive mode
                             }
-                            cli_command += "${params.BUCKET_ACCESS}"
+                            cli_command += " ${params.BUCKET_ACCESS}"
                         } else if (command == "upload-file-to-bucket") {
-                            cli_command += "${params.BUCKET_NAME} ${params.FILE_PATH}"
+                            cli_command += " ${params.BUCKET_NAME} ${params.FILE_PATH}"
                         } else if (command == "list-buckets") {
                             cli_command = cli_command
                         } else if (command == "create-hosted-zone") {
                             cli_command = cli_command
                         } else if (command == "manage-record") {
-                            cli_command += "${params.ZONE_NAME} ${params.RECORD_NAME} ${params.RECORD_TYPE} ${params.RECORD_VALUE} ${params.ACTION}"
+                            cli_command += " ${params.ZONE_NAME} ${params.RECORD_NAME} ${params.RECORD_TYPE} ${params.RECORD_VALUE} ${params.ACTION}"
                         } else if (command == "destroy-resources") {
                             cli_command = cli_command
                         }
