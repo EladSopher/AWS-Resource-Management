@@ -32,6 +32,10 @@ Ensure you have **Pulumi** and **AWS CLI** installed.
   brew install pulumi/tap/pulumi # For macOS
   ```
 
+  ```bash
+  pulumi login
+  ```
+
 - **AWS CLI:**  
   ```bash
   https://awscli.amazonaws.com/AWSCLIV2.msi # For Windows
@@ -42,6 +46,10 @@ Ensure you have **Pulumi** and **AWS CLI** installed.
 - **Set Up AWS Credentials:**  
   ```bash
   aws configure
+  AWS Access Key ID [None]: YOUR ACCESS KEY
+  AWS Secret Access Key [None]: YOUR SECRET ACCESS KEY
+  Default region name [None]: YOUR REGION
+  Default output format [None]:
   ```
 
 ---
