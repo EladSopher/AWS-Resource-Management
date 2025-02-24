@@ -77,22 +77,58 @@ python cli.py COMMAND [OPTIONS]
 
 - **Create an EC2 instance:**
   ```bash
-  python cli.py create-instances --type t2.micro --os ubuntu --count 1
+  python cli.py create-instances [TYPE] [OS] --count
+  python cli.py create-instances t3.nano ubuntu
+  python cli.py create-instances t4g.nano amazon-linux --count 2
   ```
 
-- **Start an EC2 instance:**
+- **Manage an EC2 instance:**
   ```bash
-  python cli.py manage-instances --action start --instance-id i-0abcd1234efgh5678
+  python cli.py manage-instances [ACTION] [INSTANCE_ID]
+  python cli.py manage-instances start i-0abcd1234efgh5678
+  python cli.py manage-instances stop i-0abcd1234efgh5678
+  ```
+
+- **List all EC2 instances:**
+  ```bash
+  python cli.py list-instances
   ```
 
 - **Create an S3 bucket:**
   ```bash
-  python cli.py create-bucket
+  python cli.py create-bucket [ACCESS]
+  python cli.py create-bucket private
+  python cli.py create-bucket public
   ```
 
 - **Upload a file to an S3 bucket:**
   ```bash
-  python cli.py upload-file-to-bucket --bucket-name MyBucket-1 --file-path ./file.txt
+  python cli.py upload-file-to-bucket [BUCKET_NAME] [FILE_PATH]
+  python cli.py upload-file-to-bucket MyBucket-1 ./file.txt
+  ```
+
+- **List all S3 buckets:**
+  ```bash
+  python cli.py upload-file-to-bucket [BUCKET_NAME] [FILE_PATH]
+  python cli.py upload-file-to-bucket MyBucket-1 ./file.txt
+  ```
+
+- **Create a hosted zone:**
+  ```bash
+  python cli.py create-hosted-zone
+  ```
+
+- **Manage a hosted zone record:**
+  ```bash
+  python cli.py manage-record [ZONE_NAME] [RECORD_NAME] [RECORD_TYPE] [RECORD_VALUE] [ACTION]
+  python cli.py manage-record zone-1.com test.zone-1.com A 192.168.1.1 CREATE
+  python cli.py manage-record zone-1.com test.zone-1.com A 192.168.1.2 UPDATE
+  python cli.py manage-record zone-1.com test.zone-1.com A 192.168.1.1 DELETE
+  ```
+
+- **Destroy all resources:**
+  ```bash
+  python cli.py destroy-resources
   ```
 
 ---
