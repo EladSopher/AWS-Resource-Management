@@ -1,6 +1,6 @@
 # AWS Resource Management CLI Tool
 
-This CLI tool allows users to manage AWS resources (EC2, S3, Route 53) using Pulumi and boto3.  
+This CLI tool allows users to manage AWS resources (EC2, S3, Route 53) using Pulumi and Boto3.  
 Users can interact with it in two ways:  
 - **Directly via the command line**
 - **Through a Jenkins UI**
