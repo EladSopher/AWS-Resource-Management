@@ -1,0 +1,197 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1505.vea_4b_20a_4a_495">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2221.vc657003fb_d93"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2221.vc657003fb_d93">
+      <jobProperties/>
+      <triggers/>
+      <parameters>
+        <string>RECORD_VALUE</string>
+        <string>RECORD_NAME</string>
+        <string>OS</string>
+        <string>FILE_PATH</string>
+        <string>INSTANCE_ID</string>
+        <string>ZONE_NAME</string>
+        <string>ACTION</string>
+        <string>RECORD_TYPE</string>
+        <string>CONFIRM_PUBLIC_BUCKET_CREATION</string>
+        <string>BUCKET_ACCESS</string>
+        <string>COMMAND</string>
+        <string>COUNT</string>
+        <string>TYPE</string>
+        <string>BUCKET_NAME</string>
+      </parameters>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>5</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+        <removeLastBuild>false</removeLastBuild>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.41.0">
+      <projectUrl>https://github.com/EladSopher/AWS-Resource-Management.git/</projectUrl>
+      <displayName></displayName>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>COMMAND</name>
+          <description>Choose a command to execute</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>--none--</string>
+              <string>create-instances</string>
+              <string>manage-instances</string>
+              <string>list-instances</string>
+              <string>create-bucket</string>
+              <string>upload-file-to-bucket</string>
+              <string>list-buckets</string>
+              <string>create-hosted-zone</string>
+              <string>manage-record</string>
+              <string>destroy-resources</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>ACTION</name>
+          <description>Action for managing instances or DNS records</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>--none--</string>
+              <string>start</string>
+              <string>stop</string>
+              <string>CREATE</string>
+              <string>UPDATE</string>
+              <string>DELETE</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>TYPE</name>
+          <description>Instance Type (for create-instances)</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>--none--</string>
+              <string>t3.nano</string>
+              <string>t4g.nano</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>OS</name>
+          <description>OS Type (for create-instances)</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>--none--</string>
+              <string>ubuntu</string>
+              <string>amazon-linux</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>COUNT</name>
+          <description>Number of instances to create</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>1</string>
+              <string>2</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>INSTANCE_ID</name>
+          <description>Instance ID (for manage-instances)</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>BUCKET_ACCESS</name>
+          <description>Bucket access (for create-bucket)</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>--none--</string>
+              <string>private</string>
+              <string>public</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CONFIRM_PUBLIC_BUCKET_CREATION</name>
+          <description>Check this box to create a public S3 bucket</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BUCKET_NAME</name>
+          <description>Bucket name (for upload-file-to-bucket)</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>FILE_PATH</name>
+          <description>Path to file (for upload-file-to-bucket)</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ZONE_NAME</name>
+          <description>DNS Zone Name (for manage-record)</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>RECORD_NAME</name>
+          <description>Record Name (for manage-record)</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>RECORD_TYPE</name>
+          <description>Record Type (for manage-record)</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>RECORD_VALUE</name>
+          <description>Record Value (for manage-record)</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.PasswordParameterDefinition>
+          <name>PULUMI_ACCESS_TOKEN</name>
+          <defaultValue>{AQAAABAAAAAwlVduLSUkba6iRgI3YJLcQUiMoUe1r10bX0dhEIr7bnboA2rslfD5AGUi3N4InjRmKVm9NimP1SeKHcdpHcqB8Q==}</defaultValue>
+        </hudson.model.PasswordParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.41.0">
+          <spec></spec>
+        </com.cloudbees.jenkins.GitHubPushTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@4018.vf02e01888da_f">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@5.7.0">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig>
+          <url>https://github.com/EladSopher/AWS-Resource-Management.git</url>
+          <credentialsId>github-token</credentialsId>
+        </hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches>
+        <hudson.plugins.git.BranchSpec>
+          <name>*/master</name>
+        </hudson.plugins.git.BranchSpec>
+      </branches>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <submoduleCfg class="empty-list"/>
+      <extensions/>
+    </scm>
+    <scriptPath>Jenkins/Jenkinsfile</scriptPath>
+    <lightweight>true</lightweight>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
