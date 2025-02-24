@@ -23,7 +23,7 @@ cd AWS-Resource-Management
 ```
 
 ### 2️⃣ Install Dependencies  
-Ensure you have **Python** installed.
+Ensure you have **Python3** and **pip** installed.
 
 You can install the requirements by running the command:
   ```bash
