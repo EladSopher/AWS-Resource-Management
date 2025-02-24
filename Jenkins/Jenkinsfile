@@ -2,6 +2,8 @@ pipeline {
     agent any
 
     parameters {
+        choice(name: 'OS', choices: ['Windows', 'Ubuntu', 'MacOS'], description: 'Select the OS type for execution')
+        
         choice(name: 'COMMAND', choices: [
             '--none--',
             'create-instances',
@@ -17,8 +19,8 @@ pipeline {
 
         choice(name: 'ACTION', choices: ['--none--', 'start', 'stop', 'CREATE', 'UPDATE', 'DELETE'], description: 'Action for managing instances or DNS records')
 
-        choice(name: 'TYPE', choices: ['--none--', 't3.nano', 't4g.nano'], description: 'Instance Type (for create-instances)')
-        choice(name: 'OS', choices: ['--none--', 'ubuntu', 'amazon-linux'], description: 'OS Type (for create-instances)')
+        choice(name: 'INSTANCE_TYPE', choices: ['--none--', 't3.nano', 't4g.nano'], description: 'Instance Type (for create-instances)')
+        choice(name: 'INSTANCE_OS', choices: ['--none--', 'ubuntu', 'amazon-linux'], description: 'OS Type (for create-instances)')
         choice(name: 'COUNT', choices: ['1', '2'], description: 'Number of instances to create')
         string(name: 'INSTANCE_ID', defaultValue: '', description: 'Instance ID (for manage-instances)')
         choice(name: 'BUCKET_ACCESS', choices: ['--none--', 'private', 'public'], description: 'Bucket access (for create-bucket)')
@@ -39,36 +41,60 @@ pipeline {
     }
 
     stages {
+        stage('Prepare Environment') {
+            steps {
+                script {
+                    if (params.OS == 'Windows') {
+                        bat '''
+                        echo Running on Windows...
+                        pip install -r requirements.txt
+                        '''
+                    } else {
+                        sh '''
+                        echo Running on ${params.OS}...
+                        pip3 install -r requirements.txt
+                        '''
+                    }
+                }
+            }
+        }
+        
         stage('Execute Command') {
             steps {
                 withAWS(credentials: 'AWS creds')
                 {
                     script {
-                        def command = params.COMMAND
+                        def cli_command = "python cli.py ${params.COMMAND}
     
                         if (command == "create-instances") {
-                            bat "python cli.py create-instances --type ${params.TYPE} --os ${params.OS} --count ${params.COUNT}"
+                            cli_command += "${params.INSTANCE_TYPE} ${params.INSTANCE_OS} --count ${params.COUNT}"
                         } else if (command == "manage-instances") {
-                            bat "python cli.py manage-instances ${params.ACTION} ${params.INSTANCE_ID}"
+                            cli_command += "${params.ACTION} ${params.INSTANCE_ID}"
                         } else if (command == "list-instances") {
-                            bat "python cli.py list-instances"
+                            cli_command = cli_command
                         } else if (command == "create-bucket") {
                             if (params.CONFIRM_PUBLIC_BUCKET_CREATION) {
                                 env.SKIP_CONFIRMATION = 'true'  // Bypass confirmation for public bucket
                             } else {
                                 env.SKIP_CONFIRMATION = 'false'  // Ask for confirmation in interactive mode
                             }
-                            bat "python cli.py create-bucket --access ${params.BUCKET_ACCESS}"
+                            cli_command += "${params.BUCKET_ACCESS}"
                         } else if (command == "upload-file-to-bucket") {
-                            bat "python cli.py upload-file-to-bucket ${params.BUCKET_NAME} ${params.FILE_PATH}"
+                            cli_command += "${params.BUCKET_NAME} ${params.FILE_PATH}"
                         } else if (command == "list-buckets") {
-                            bat "python cli.py list-buckets"
+                            cli_command = cli_command
                         } else if (command == "create-hosted-zone") {
-                            bat "python cli.py create-hosted-zone"
+                            cli_command = cli_command
                         } else if (command == "manage-record") {
-                            bat "python cli.py manage-record ${params.ZONE_NAME} ${params.RECORD_NAME} ${params.RECORD_TYPE} ${params.RECORD_VALUE} ${params.ACTION}"
+                            cli_command += "${params.ZONE_NAME} ${params.RECORD_NAME} ${params.RECORD_TYPE} ${params.RECORD_VALUE} ${params.ACTION}"
                         } else if (command == "destroy-resources") {
-                            bat "python cli.py destroy-resources"
+                            cli_command = cli_command
+                        }
+
+                        if (params.OS == 'Windows') {
+                            bat cli_command
+                        } else {
+                            sh cli_command
                         }
                     }
                 }
