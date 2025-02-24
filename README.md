@@ -71,6 +71,7 @@ Or you can install them one by one:
 Run commands using:  
 ```bash
 python cli.py COMMAND [OPTIONS]
+python cli.py COMMAND -h
 ```
 
 ### Example Commands
