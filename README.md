@@ -54,6 +54,23 @@ Or you can install them one by one:
   sudo apt install awscli  # For Ubuntu/Linux
   brew install awscli       # For macOS
   ```
+  
+- **Jenkins:**
+  ```bash
+  https://www.jenkins.io/download/#downloading-jenkins # For Windows
+
+  # For Ubuntu
+  sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+  echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+  sudo apt-get update
+  sudo apt-get install jenkins
+  sudo apt update
+  sudo apt install fontconfig openjdk-17-jre
+  
+  brew install jenkins-lts # For macOS 
 
 ### 3️⃣ Set Up AWS Credentials
 ```bash
