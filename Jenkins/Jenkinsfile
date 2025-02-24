@@ -46,12 +46,10 @@ pipeline {
                 script {
                     if (params.OS == 'Windows') {
                         bat '''
-                        echo Running on Windows...
                         pip install -r requirements.txt
                         '''
                     } else {
                         sh '''
-                        echo Running on ${params.OS}...
                         pip3 install -r requirements.txt
                         '''
                     }
