@@ -10,7 +10,26 @@ from scripts.route53_manage import manage_dns_record
 from scripts.destroy_resources import destroy_resources
 
 def main():
-    """Main function to handle CLI commands."""
+    """
+    AWS Resource Management CLI
+
+    This script provides a command-line interface to manage various AWS resources,
+    including EC2 instances, S3 buckets, and Route 53 hosted zones. Each command
+    is implemented as a subcommand, and the script uses argparse for argument parsing.
+
+    The CLI supports the following commands:
+    - EC2: Create, list, and manage (start/stop) EC2 instances.
+    - S3: Create S3 buckets, upload files to buckets, and list buckets.
+    - Route 53: Create hosted zones and manage DNS records.
+    - Destroy: Destroy all CLI-managed AWS resources (EC2, S3, and Route 53).
+
+    Args:
+    - None
+
+    Returns:
+    - None
+    """
+
     parser = argparse.ArgumentParser(description="AWS Resource Management CLI")
 
     # Create subparsers for different commands
@@ -24,7 +43,7 @@ def main():
     create_instance_parser.add_argument("--count", type=int, default=1,
                                         help="Number of instances to create (max 2)")
 
-    # Subcommand for managing instances
+    # Subcommand for managing instances (start/stop)
     manage_instance_parser = subparsers.add_parser("manage-instances",
                                                    help="Manage a CLI-Managed EC2 instance (start/stop)")
     manage_instance_subparsers = manage_instance_parser.add_subparsers(dest="action", required=True)
@@ -35,7 +54,6 @@ def main():
     stop_instance_parser.add_argument("instance_id", help="ID of the instance to stop")
 
     # Subcommand for listing instances
-    # list_parser = subparsers.add_parser("list-instances", help="List EC2 instances created via the CLI")
     subparsers.add_parser("list-instances", help="List EC2 instances created via the CLI")
 
 
@@ -56,8 +74,10 @@ def main():
 
 
     # Route 53 Related Commands
+    # Subcommand for creating a Route 53 hosted zone
     subparsers.add_parser("create-hosted-zone", help="Create a Route 53 hosted zone")
 
+    # Subcommand for managing DNS records in a hosted zone
     manage_record_parser = subparsers.add_parser("manage-record",
                                                  help="Manage DNS records in a CLI-managed hosted zone")
     manage_record_parser.add_argument("zone_name", help="Hosted zone name (must be CLI-managed)")
@@ -78,26 +98,26 @@ def main():
 
     # Call the appropriate function based on the command
     if args.command == "create-instances":
-        create_instance(args.type, args.os, args.count)
+        create_instance(args.type, args.os, args.count) # Create EC2 instance(s)
     elif args.command == "manage-instances":
         if args.action == "start":
-            start_instance(args.instance_id)
+            start_instance(args.instance_id) # Start the specified EC2 instance
         elif args.action == "stop":
-            stop_instance(args.instance_id)
+            stop_instance(args.instance_id) # Stop the specified EC2 instance
     elif args.command == "list-instances":
-        list_instances()
+        list_instances() # List EC2 instances
     elif args.command == "create-bucket":
-        create_bucket(args.access)
+        create_bucket(args.access) # Create an S3 bucket with specified access type
     elif args.command == "upload-file-to-bucket":
-        upload_files_to_bucket(args.bucket_name, args.file_path)
+        upload_files_to_bucket(args.bucket_name, args.file_path) # Upload file to S3 bucket
     elif args.command == "list-buckets":
-        list_buckets()
+        list_buckets() # List CLI-managed S3 buckets
     elif args.command == "create-hosted-zone":
-        create_hosted_zone()
+        create_hosted_zone() # Create a Route 53 hosted zone
     elif args.command == "manage-record":
-        manage_dns_record(args.zone_name, args.record_name, args.record_type, args.record_value, args.action)
+        manage_dns_record(args.zone_name, args.record_name, args.record_type, args.record_value, args.action) # Manage DNS record
     elif args.command == "destroy-resources":
-        destroy_resources()
+        destroy_resources() # Destroy all CLI-managed resources
 
 
 if __name__ == "__main__":
