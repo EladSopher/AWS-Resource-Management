@@ -138,14 +138,9 @@ python cli.py COMMAND -h
 
 ### 🔹 **Step 1: Import the Jenkins Job**  
 
-#### Method 1: Using `config.xml` (Recommended)
+1. Copy the `config.xml` file from the Jenkins directory inside the repo.
 
-1. Locate the `config.xml` file inside the Jenkins job directory:  
-   ```
-   JENKINS_HOME/jobs/YOUR_JOB_NAME/config.xml
-   ```
-2. Copy this file and share it with the user who wants to use the Jenkins pipeline.
-3. On the target Jenkins instance:
+2. Navigate to Jenkins location on your PC:
    - Create a new folder inside:
      ```
      JENKINS_HOME/jobs/New_Job_Name/
@@ -153,15 +148,10 @@ python cli.py COMMAND -h
    - Place the `config.xml` inside this folder.
    - Restart Jenkins:
      ```bash
-     systemctl restart jenkins
+     .\jenkins.exe restart # For Windows
+     systemctl restart jenkins # For ubuntu/linux
+     brew services restart jenkins-lts # For macOS
      ```
-
-#### Method 2: Using Jenkins CLI
-
-If the user has Jenkins CLI access, they can run:  
-```bash
-java -jar jenkins-cli.jar -s http://your-jenkins-url create-job NEW_JOB_NAME < config.xml
-```
 
 ### 🔹 **Step 2: Run the Job via Jenkins UI**
 
