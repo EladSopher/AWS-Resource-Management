@@ -18,8 +18,8 @@ Users can interact with it in two ways:
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/your-repo/aws-cli-tool.git
-cd aws-cli-tool
+git clone https://github.com/EladSopher/AWS-Resource-Management.git
+cd AWS-Resource-Management
 ```
 
 ### 2️⃣ Install Dependencies  
