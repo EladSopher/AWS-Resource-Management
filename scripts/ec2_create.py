@@ -3,6 +3,7 @@ import pulumi_aws as aws
 import pulumi.automation as auto
 from pulumi import ResourceOptions
 from scripts.helpers import get_latest_ami, get_cli_managed_instances  # Helper function to get AMI
+import time  # For unique stack naming
 
 def pulumi_program(instance_type, os_type, count, existing_instance_count, existing_instance_ids):
     """
@@ -72,7 +73,7 @@ def create_instance(instance_type, os_type, count):
 
     # Define Pulumi project and stack names
     project_name = "AWS-Resource-Management"
-    stack_name = "dev"
+    stack_name = "devec2"
 
     # Create or select the Pulumi stack
     stack = auto.create_or_select_stack(

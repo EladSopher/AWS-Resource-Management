@@ -5,6 +5,7 @@ from pulumi_aws import s3
 from pulumi import ResourceOptions
 import pulumi.automation as auto
 from scripts.helpers import get_next_bucket_name
+import time  # For unique stack naming
 
 def create_bucket(access_type: str):
     """
@@ -17,10 +18,10 @@ def create_bucket(access_type: str):
     bucket_name = get_next_bucket_name() # Generate a unique bucket name following the CLI convention
 
     # Check if we're running in Jenkins or a non-interactive environment
-    skip_confirmation = os.getenv("SKIP_CONFIRMATION", "false").lower() == "true"
+    skip_confirmation_jenkins = os.getenv("SKIP_CONFIRMATION", "false").lower() == "true"
 
     # Ask for confirmation before creating a public bucket
-    if access_type == "public" and not skip_confirmation:
+    if access_type == "public" and not skip_confirmation_jenkins:
         confirm = input(f"Bucket {bucket_name} will be public. Are you sure? (yes/no): ").strip().lower()
         if confirm != "yes":
             print("Bucket creation canceled.")
@@ -77,7 +78,7 @@ def create_bucket(access_type: str):
         pulumi.export("bucket_name", bucket.id) # Export bucket name for reference
 
     # Create or select the Pulumi stack for managing the infrastructure
-    stack_name = "dev"
+    stack_name = "devs3"
     project_name = "AWS-Resource-Management"
 
     stack = auto.create_or_select_stack(
