@@ -165,6 +165,10 @@ python app.py # For Windows
 python3 app.py # For macOS/Linux
 ```
 
+⚠️**Important notes:**
+
+- When trying to create a public bucket, you will need to type 'yes' back in the terminal in order to complete the command.
+
 ---
 
 ## 🖥️ Using Jenkins UI
