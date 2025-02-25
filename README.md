@@ -42,7 +42,8 @@ You can install the requirements by running these commands:
 
 - **Boto3:**
   ```bash
-  pip install boto3
+  pip install boto3 # For Windowns
+  pip3 install boto3 # For macOS/Linux
   ```
 
 - **AWS CLI:**  
@@ -56,7 +57,7 @@ You can install the requirements by running these commands:
   ```bash
   pip install tk # For Windows
   sudo apt-get install python3-tk # For Ubuntu/Linux
-  brew install python-tk
+  brew install python-tk # For macOS
   ```
   
 - **Jenkins:**
