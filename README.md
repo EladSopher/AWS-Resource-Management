@@ -168,6 +168,7 @@ python3 app.py # For macOS/Linux
 ⚠️**Important notes:**
 
 - When trying to create a public bucket, you will need to type 'yes' back in the terminal in order to complete the command.
+- When trying to upload a file to a S3 bucket, make sure you don't pass a path with quotation marks.
 
 ---
 
@@ -211,3 +212,17 @@ python3 app.py # For macOS/Linux
 5. Click **Build** to execute the command.
 
 ---
+
+## 🧹 Clean up
+
+**Make sure to run these commands to properly clean up the environment.**
+
+1. Check your stacks:
+   ```bash
+   pulumi stack ls -a
+   ```
+
+2. Run the command:
+   ```bash
+   pulumi stack rm -f [STACK_NAME]
+   ```
