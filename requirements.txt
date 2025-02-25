@@ -1,7 +1,0 @@
-pulumi
-pulumi_aws
-pulumi-automation
-pulumi-automation-utils
-boto3
-botocore
-awscli
