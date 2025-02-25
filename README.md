@@ -157,7 +157,7 @@ python cli.py COMMAND -h
 
 ---
 
-## 🖥️ Using the Local UI
+## 🖥️ Using the Local UI (Tkinter)
 
 **Run the command:**
 ```bash
