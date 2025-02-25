@@ -3,6 +3,7 @@
 This CLI tool allows users to manage AWS resources (EC2, S3, Route 53) using Pulumi and Boto3.  
 Users can interact with it in two ways:  
 - **Directly via the command line**
+- **Through a Tkinter UI**
 - **Through a Jenkins UI**
 
 ## 🚀 Features
@@ -10,6 +11,7 @@ Users can interact with it in two ways:
 - **EC2 Instance Management:** Create, list, start, and stop instances.
 - **S3 Bucket Management:** Create, list, and upload files to buckets.
 - **Route 53 DNS Management:** Create hosted zones and manage DNS records.
+- **local UI:** Use Python Tkinter to execute commands.
 - **Jenkins UI Integration:** Execute CLI commands using a graphical interface.
 
 ---
@@ -25,12 +27,7 @@ cd AWS-Resource-Management
 ### 2️⃣ Install Dependencies  
 Ensure you have **Python3** and **pip** installed.
 
-You can install the requirements by running the command:
-  ```bash
-  pip install -r requirements.txt
-  ```
-
-Or you can install them one by one:
+You can install the requirements by running these commands:
 
 - **Pulumi:**  
   ```bash
@@ -53,6 +50,13 @@ Or you can install them one by one:
   https://awscli.amazonaws.com/AWSCLIV2.msi # For Windows
   sudo apt install awscli  # For Ubuntu/Linux
   brew install awscli       # For macOS
+  ```
+
+- **Tkinter:**
+  ```bash
+  pip install tk # For Windows
+  sudo apt-get install python3-tk # For Ubuntu/Linux
+  brew install python-tk
   ```
   
 - **Jenkins:**
@@ -85,7 +89,8 @@ Or you can install them one by one:
 
 ## 🖥️ Using the CLI
 
-Run commands using:  
+**Run commands using:**
+
 ```bash
 python cli.py COMMAND [OPTIONS] # For Windows
 python3 cli.py COMMAND [OPTIONS] # For macOs/Ubuntu
@@ -152,6 +157,16 @@ python cli.py COMMAND -h
 
 ---
 
+## 🖥️ Using the Local UI
+
+**Run the command:**
+```bash
+python app.py # For Windows
+python3 app.py # For macOS/Linux
+```
+
+---
+
 ## 🖥️ Using Jenkins UI
 
 ### 🔹 **Step 1: Import the Jenkins Job**  
@@ -192,20 +207,3 @@ python cli.py COMMAND -h
 5. Click **Build** to execute the command.
 
 ---
-
-## 📜 License
-
-This project is licensed under the MIT License.
-
----
-
-## 🤝 Contributing
-
-Feel free to fork this repository and contribute improvements! Submit a PR when you're ready.
-
----
-
-## 🆘 Need Help?
-
-Open an issue on GitHub, or reach out via our **Discord Server**.
-
